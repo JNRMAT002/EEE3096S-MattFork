@@ -42,6 +42,6 @@ def endlog():
     
     # Writing elapsed time to textfile (uses append and writes to end of file)
     with open('GoldStd.txt', 'a') as outputFile:
-        outputFile.write(secondsToStr(elapsed) + '\n')
+        outputFile.write(str(elapsed*1000) + '\n')
     outputFile.close()
 
