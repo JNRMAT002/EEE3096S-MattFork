@@ -5,7 +5,7 @@
  * Further Modified By: Mark Njoroge 
  *
  * 
- * <STUDNUM_1> <STUDNUM_2>
+ * JNRMAT002 RYXCAM002
  * Date
 */
 
@@ -59,7 +59,7 @@ void initGPIO(void){
 	//Set up the LED
 	//Write your Logic here
 
-	pinMode(LED, PWM_OUTPUT);
+	pinMode(LED, OUTPUT);
 
 	printf("LED and RTC done\n");
 	
@@ -98,7 +98,7 @@ int main(void){
 	int currentTime;
 
 	// Repeat this until we shut down
-	int PWM_val = 0;
+	
 	for (;;){
 		//Fetch the time from the RTC
 		//Write your logic here
@@ -108,12 +108,15 @@ int main(void){
 
 		//Toggle Seconds LED
 		//Write your logic here
-		PWM_val += 32;
-		if (PWM_val > 255){
-			PWM_val = 0;
-		}
-		pwmWrite(LED, PWM_val);
 		
+		if (secs%2==1)
+		{
+			digitalWrite(LED, HIGH);
+		}
+		else
+		{
+			digitalWrite(LED, LOW);
+		}
 		currentTime = millis();
 		// Print out the time we have stored on our RTC
 		if(currentTime >= oldTime + 1000){
