@@ -13,7 +13,7 @@ int main(int argc, char**argv){
     printf("Total amount of samples: %ld\n", sizeof(data) / sizeof(data[0]));
     
     FILE *fileOut;
-    fileOut = fopen("ozout/fpOz.txt", "w");
+    fileOut = fopen("optout/Og.txt", "w");
 
     
     for (int k=0; k<10;k++){
@@ -29,10 +29,7 @@ int main(int argc, char**argv){
     fclose(fileOut);
     FILE *fileOutResult;
     fileOutResult = fopen("output/O0Result.txt", "w");
-    for (int k=0; k<sizeof(result)/sizeof(result[0]); k++)
-    {
-        fprintf(fileOutResult, "%f\n", result[k]);
-    }
+    fwrite(result, sizeof(result), fileOutResult);
     fclose(fileOutResult);
     printf("End Unthreaded Test\n");
     return 0;

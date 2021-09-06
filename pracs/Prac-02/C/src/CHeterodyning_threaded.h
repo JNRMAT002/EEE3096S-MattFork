@@ -12,7 +12,22 @@
 #include "globals.h"
 //------------------------------------------------------------------------------
 
-#define Thread_Count 16
+#define Thread_Count 32
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //------------------------------------------------------------------------------
 
 pthread_mutex_t Mutex; // One mutex
@@ -20,7 +35,7 @@ pthread_mutex_t Mutex; // One mutex
 //------------------------------------------------------------------------------
 
 // The thread "main" function.  Receives a unique thread ID as parameter
-void* Thread_Main(void* Parameter);
+void *Thread_Main(void *Parameter);
 //------------------------------------------------------------------------------
 
 #endif

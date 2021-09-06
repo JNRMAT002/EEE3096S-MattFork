@@ -1,6 +1,6 @@
 #include "CHeterodyning_threaded.h"
 
-__fp16 result [SAMPLE_COUNT];
+float result [SAMPLE_COUNT];
 
 // This is each thread's "main" function.  It receives a unique ID
 void* Thread_Main(void* Parameter){
@@ -21,7 +21,13 @@ int main(int argc, char** argv){
     int j;
     // Initialise everything that requires initialisation
     tic();
+    FILE *fileOut;
+    fileOut = fopen("output/CHeterodyning_threaded_x32.txt", "w");
+
+
     // Spawn threads...
+    for (int i=0; i<10; i++)
+    {
     int       Thread_ID[Thread_Count]; // Structure to keep the thread ID
     pthread_t Thread   [Thread_Count]; // pThreads structure for thread admin
 
@@ -35,22 +41,27 @@ int main(int argc, char** argv){
     printf("Threads created :-)\n");
     pthread_mutex_unlock(&Mutex);
 
-    tic();
+    //FILE *fileOut;
+    //fileOut = fopen("CHeterodyning_threaded.txt", "w");
+      tic();
     // Wait for threads to finish
-    for(j = 0; j < Thread_Count; j++){
-        if(pthread_join(Thread[j], 0)){
-            pthread_mutex_lock(&Mutex);
-            printf("Problem joining thread %d\n", j);
-            pthread_mutex_unlock(&Mutex);
-        }
-    }
+      for(j = 0; j < Thread_Count; j++){
+          if(pthread_join(Thread[j], 0)){
+              pthread_mutex_lock(&Mutex);
+              printf("Problem joining thread %d\n", j);
+              pthread_mutex_unlock(&Mutex);
+          }
+      }
 
-  // No more active threads, so no more critical sections required
+    // No more active threads, so no more critical sections required
 
-  printf("All threads have quit\n");
-  printf("Time taken for threads to run = %lg ms\n", toc()/1e-3);
-
+     printf("All threads have quit\n");
+     double tocVal = toc()/1e-3;
+     printf("Time taken for threads to run = %lg ms\n", tocVal);
+     fprintf(fileOut, "%1g\n", tocVal);
+   }
+  //here
   return 0;
 }
-//------------------------------------------------------------------------------
+//---------------------------------------------------------------tic();---------------
 

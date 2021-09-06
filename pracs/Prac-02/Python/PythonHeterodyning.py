@@ -24,12 +24,17 @@ def main():
     os.system('rm GoldStd.txt')
     print("There are {} samples".format(len(c)))
     print("using type {}".format(type(data[0])))
-    for j in range(10): # Runs timed section 10 times for 10 readings
-        result.clear()
-        Timing.startlog()
-        for i in range(len(c)):
-            result.append(c[i] * d[i])
-        Timing.endlog()
+    #for j in range(10): # Runs timed section 10 times for 10 readings
+    result.clear()
+    Timing.startlog()
+    for i in range(len(c)):
+        result.append(c[i] * d[i])
+    Timing.endlog()
+    
+    outputTxt = open("PythonResult.txt", "w")
+    for i in range(len(result)):
+        outputTxt.write(str(result[i]) + "\n")
+    outputTxt.close()
 
 # Only run the functions if this module is run
 if __name__ == "__main__":
