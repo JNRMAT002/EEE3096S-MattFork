@@ -12,7 +12,7 @@ LED_value = [11, 13, 15]
 LED_accuracy = 32
 btn_submit = 16
 btn_increase = 18
-buzzer = None
+buzzer = 33
 eeprom = ES2EEPROMUtils.ES2EEPROM()
 
 
@@ -58,26 +58,59 @@ def display_scores(count, raw_data):
     # print the scores to the screen in the expected format
     print("There are {} scores. Here are the top 3!".format(count))
     # print out the scores in the required format
+    iter_count = 0
+
+    for i in range(0, len(raw_data), 4):
+        iter_count += 1
+        print(str(iter_count) + " - " + str(raw_data[i]) + str(raw_data[i+1]) + str(raw_data[i+2]) + " took " + str(raw_data[i+3])+ " guesses")
+        if iter_count==3:
+            break
     pass
 
 
 # Setup Pins
 def setup():
     # Setup board mode
+    GPIO.setmode(GPIO.BOARD)
+
     # Setup regular GPIO
+    GPIO.setup(btn_submit, GPIO.OUT)
+    GPIO.setup(btn_increase, GPIO.OUT)
+
+    for i in range(3):
+        GPIO.setup(LED_value[i], GPIO.OUT) # LEDs set to output
+
+    # Need to do pi_pwm_LED.start(<Duty Cycle>) and
+    # pi_pwm_buzzer.start(<Duty Cycle>)
+
     # Setup PWM channels
+    GPIO.setup(LED_accuracy, GPIO.OUT) # PWM LED set to output
+    pi_pwm_LED = GPIO.PWM(LED_accuracy, 1000) # PWM instance for LED_accuracy with frequency 1kHz
+
+    GPIO.setup(buzzer, GPIO.OUT) # PWM buzzer set to output
+    pi_pwm_buzzer = GPIO.PWM(buzzer, 250) # Pwm instance for buzzer with frequency 250Hz
+
     # Setup debouncing and callbacks
+    # Cam's magic ting ...
+
     pass
 
 
 # Load high scores
 def fetch_scores():
     # get however many scores there are
-    score_count = None
+    score_count = eeprom.read_byte(0)
+    
     # Get the scores
-    
+    scores = eeprom.read_block(1, score_count*4)
+
     # convert the codes back to ascii
-    
+    for i in range(len(scores)):
+        if ((i+1)%4 == 0):
+            scores[i] = ord(chr(scores[i]))
+        else:
+            scores[i] = chr(scores[i])
+
     # return back the results
     return score_count, scores
 
@@ -85,7 +118,11 @@ def fetch_scores():
 # Save high scores
 def save_scores():
     # fetch scores
+    count, scores = fetch_scores()
+
     # include new score
+    
+
     # sort
     # update total amount of scores
     # write new scores
