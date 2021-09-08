@@ -3,6 +3,7 @@ import RPi.GPIO as GPIO
 import random
 import ES2EEPROMUtils
 import os
+import time
 
 # some global variables that need to change as we run the program
 end_of_game = None  # set if the user wins or ends the game
@@ -74,8 +75,8 @@ def setup():
     GPIO.setmode(GPIO.BOARD)
 
     # Setup regular GPIO
-    GPIO.setup(btn_submit, GPIO.OUT)
-    GPIO.setup(btn_increase, GPIO.OUT)
+    GPIO.setup(btn_submit, GPIO.IN)
+    GPIO.setup(btn_increase, GPIO.IN)
 
     for i in range(3):
         GPIO.setup(LED_value[i], GPIO.OUT) # LEDs set to output
@@ -91,6 +92,8 @@ def setup():
     pi_pwm_buzzer = GPIO.PWM(buzzer, 250) # Pwm instance for buzzer with frequency 250Hz
 
     # Setup debouncing and callbacks
+    GPIO.add_event_detect(btn_increase, GPIO.RISING, bouncetime=200)
+    GPIO.add_event_detect(btn_submit, GPIO.RISING, bouncetime=200)
     # Cam's magic ting ...
 
     pass
@@ -121,7 +124,7 @@ def save_scores():
     count, scores = fetch_scores()
 
     # include new score
-    
+
 
     # sort
     # update total amount of scores
